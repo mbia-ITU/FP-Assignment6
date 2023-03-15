@@ -9,7 +9,7 @@
     let state = mkState [("x", 5); ("y", 42)] hello ["_pos_"; "_result_"]
     let emptyState = mkState [] [] []
     
-    let add a b = failwith "Not implemented"      
+    let add a b = failwith "Not implemented"     // test 
     let div a b = failwith "Not implemented"      
 
     type aExp =
