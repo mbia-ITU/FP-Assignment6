@@ -46,10 +46,10 @@
         S (fun s -> Success ((), {s with vars = Map.empty :: s.vars}))
 
     let pop : SM<unit> =  
-         S (fun s -> Success ((), {s with vars = s.vars |> List.tail}))  //Maybe s.vars.tail 
+         S (fun s -> Success ((), {s with vars = List.tail s.vars}))  //Maybe s.vars.tail 
 
     let wordLength : SM<int> = 
-        S (fun s -> Success (s.word.Length, s))    
+        S (fun s -> Success (List.length s.word, s))    
 
     let characterValue (pos : int) : SM<char> = failwith "Not implemented"      
 
