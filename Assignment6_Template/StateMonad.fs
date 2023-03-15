@@ -51,9 +51,17 @@
     let wordLength : SM<int> = 
         S (fun s -> Success (List.length s.word, s))    
 
-    let characterValue (pos : int) : SM<char> = failwith "Not implemented"      
+    let characterValue (pos : int) : SM<char> =        //s.word.[]     
+        S (fun s -> 
+            match pos with
+            | pos when pos > -1 && pos < List.length s.word -> Success (fst s.word.[pos], s)
+            | _ -> Failure (IndexOutOfBounds pos))
 
-    let pointValue (pos : int) : SM<int> = failwith "Not implemented"      
+    let pointValue (pos : int) : SM<int> = 
+        S (fun s -> 
+            match pos with
+            | pos when pos > -1 && pos < List.length s.word -> Success (snd s.word.[pos], s)
+            | _ -> Failure (IndexOutOfBounds pos))     
 
     let lookup (x : string) : SM<int> = 
         let rec aux =
