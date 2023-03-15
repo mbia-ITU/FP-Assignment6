@@ -46,7 +46,7 @@
         S (fun s -> Success ((), {s with vars = Map.empty :: s.vars}))
 
     let pop : SM<unit> =  
-         S (fun s -> Success ((), {s with vars = Map.empty :: s.vars}))  //List.tail   
+         S (fun s -> Success ((), {s with vars = s.vars |> List.tail}))   
 
     let wordLength : SM<int> = failwith "Not implemented"      
 
