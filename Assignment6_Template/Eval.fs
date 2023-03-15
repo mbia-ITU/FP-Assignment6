@@ -2,6 +2,7 @@
 
     open StateMonad
     open Types
+    open System
 
     (* Code for testing *)
 
@@ -65,12 +66,47 @@
     let (.<=.) a b = a .<. b .||. ~~(a .<>. b)
     let (.>=.) a b = ~~(a .<. b)                (* numeric greater than or equal to *)
     let (.>.) a b = ~~(a .=. b) .&&. (a .>=. b) (* numeric greater than *)    
+   
+    let binop f a b =
+        a >>= fun x ->
+        b >>= fun y ->
+        ret (f x y)
 
-    let arithEval a : SM<int> = failwith "Not implemented"      
+    let rec arithEval a : SM<int> = 
+        match a with
+        | N n -> ret n
+        | V x -> lookup x
+        | WL -> wordLength
+        | PV a1 -> arithEval a1 >>= (fun r -> pointValue r)
+        | Add (a1, a2) -> binop ( + ) (arithEval a1) (arithEval a2)
+        | Sub (a1, a2) -> binop ( - ) (arithEval a1) (arithEval a2)
+        | Mul (a1, a2) -> binop ( * ) (arithEval a1) (arithEval a2)
+        | Div (a1, a2) -> div (arithEval a1) (arithEval a2)
+        | Mod (a1,a2) -> arithEval a2 >>= fun r2 -> if r2 <> 0 then arithEval a1 >>= (fun r1 -> ret (r1%r2)) else fail DivisionByZero
+        | CharToInt c -> charEval c >>= (fun r -> ret (int r)) // well i think there is a mistake in the tests the right answer would be: int r - int '0'
 
-    let charEval c : SM<char> = failwith "Not implemented"      
+    and charEval c : SM<char> = 
+        match c with
+        | C(c) -> ret c
+        | ToUpper(c) -> charEval c >>= (fun r -> ret (Char.ToUpper r))
+        | ToLower(c) -> charEval c >>= (fun r -> ret (Char.ToLower r))
+        | CV(a) -> arithEval a >>= (fun r -> characterValue r)
+        | IntToChar a -> arithEval a >>= (fun r -> ret (char (r + int '0'))) 
 
-    let boolEval b : SM<bool> = failwith "Not implemented"
+    let rec boolEval b : SM<bool> = 
+        match b with
+        | TT -> ret true
+        | FF -> ret false
+
+        | AEq(a1,a2) -> binop ( = ) (arithEval a1) (arithEval a2)
+        | ALt(a1,a2) -> binop ( < ) (arithEval a1) (arithEval a2)
+
+        | Not(b1) -> boolEval b1 >>= (fun r -> ret (not r))
+        | Conj(b1, b2) -> binop ( && ) (boolEval b1) (boolEval b2)
+
+        | IsDigit(c) -> charEval c >>= (fun r -> ret (Char.IsDigit r))
+        | IsLetter(c) -> charEval c >>= (fun r -> ret (Char.IsLetter r))
+        | IsVowel(c) -> charEval c >>= (fun r -> ret ("aeiouæøåAEIOUÆØÅ ".Contains r)) 
 
 
     type stmnt =                  (* statements *)
