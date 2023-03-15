@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "9GZbG0hMaJ7yr5/iB7BN3cRk2pkJGe51Py2rv4Y2v1KZVpGLBffwCrrYtjJaClmBh50TR4sWB/SnVDKHU9YUVg==",
+  "success": true,
+  "projectFilePath": "c:\\Users\\mikke\\iCloudDrive\\ITU\\Functional programming\\FP-Assignment6\\Assignment6_Template\\Assignment6_Template.fsproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\mikke\\.nuget\\packages\\fsharp.core\\7.0.0\\fsharp.core.7.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
