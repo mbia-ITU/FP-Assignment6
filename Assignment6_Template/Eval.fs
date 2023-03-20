@@ -83,7 +83,7 @@
         | Mul (a1, a2) -> binop ( * ) (arithEval a1) (arithEval a2)
         | Div (a1, a2) -> div (arithEval a1) (arithEval a2)
         | Mod (a1,a2) -> arithEval a2 >>= fun r2 -> if r2 <> 0 then arithEval a1 >>= (fun r1 -> ret (r1%r2)) else fail DivisionByZero
-        | CharToInt c -> charEval c >>= (fun r -> ret (int r)) // well i think there is a mistake in the tests the right answer would be: int r - int '0'
+        | CharToInt c -> charEval c >>= (fun r -> ret (int r))
 
     and charEval c : SM<char> = 
         match c with
